@@ -277,3 +277,101 @@ plt.show()
 #### Output
 ![Sine_Cos Wave](./Sin_Cos_Curves/Sin_Cos%20in%20a%20single%20graph.png)
 
+## Plotting the bar graphs
+
+```python
+import matplotlib.pyplot as plt
+
+# Bar Graph Plotting
+fig = plt.figure()
+ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])     # [left,bottom,width,height]
+languages = ['English', 'French', 'Spanish', 'German', 'Hindi', 'Chinese']      # X-axis
+num_of_people = [100, 30, 60, 20, 140, 80]              # Y-axis
+
+ax.bar(languages, num_of_people)        # Plotting
+plt.xlabel('Languages')                 # X label
+plt.ylabel('Number of People')          # Y label
+plt.title('Number of People by Language')       # Title
+
+plt.show()          # shows the graph
+```
+
+#### Output
+![Bar Graph](./Bar_Graph/Bar%20Graph%20add_axes.png)
+
+But what happens with add_axes() is, if the axes is not set properly the view is not shown as expected. So we use plt.subplots() => This reduces the lines of code and auto adjusts the view according to the size as follows : 
+
+```python
+import matplotlib.pyplot as plt
+
+# Bar Graph Plotting with plt.subplots()
+fig, ax = plt.subplots()
+
+languages = ['English', 'French', 'Spanish', 'German', 'Hindi', 'Chinese']      # X-axis
+num_of_people = [100, 30, 60, 20, 140, 80]              # Y-axis
+
+ax.bar(languages, num_of_people)        # Plotting
+plt.xlabel('Languages')                 # X label
+plt.ylabel('Number of People')          # Y label
+plt.title('Number of People by Language')       # Title
+
+plt.show()          # shows the graph
+```
+#### Output
+![Bar Graph](./Bar_Graph/Bar%20Graph%20plt.subplots().png)
+
+## Plotting the pie charts
+
+```python
+import matplotlib.pyplot as plt
+
+# Pie Chart Plotting
+fig, ax = plt.subplots()
+
+languages = ['English', 'French', 'Spanish', 'German', 'Hindi', 'Chinese']      # X-axis
+num_of_people = [100, 30, 60, 20, 140, 80]              # Y-axis
+
+# first argument takes the number by which pie slices must occur, second argument are the labels to the pie slices and third argument is the percentage by which the pie slices must cut and can be seen to the viewer % % indicates to use character % sign with number 1.1f. It is used to format a string literal.
+
+ax.pie(num_of_people, labels=languages, autopct="%1.1f%%")    
+plt.show()
+```
+
+#### Output
+![Pie Chart](./Pie_Chart/Pie%20Chart.png)
+
+## Plotting a Scatter Graph
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+x = np.linspace(10,20,50)
+fig, ax = plt.subplots()
+ax.scatter(x,np.sin(x),color='r')
+ax.scatter(x,np.cos(x),color='b')   # we have to use color parameter to apply color
+plt.show()
+```
+
+#### Output
+![Scatter Graph](./Scatter_Graph/Scatter%20Graph.png)
+
+## Plotting a 3D Scatter Graph
+
+```python
+# 3D Scatter Graph
+
+# to give subplots a parameter subplot_kw={} is needed it tells that the subplots contains a parameter 
+fig, ax = plt.subplots(subplot_kw={'projection': '3d'})
+
+x = 20 * np.random.rand(100)     # generates 100 random values between 0 and 1
+
+# c = x => the color of each point varies according to its x-coordinate
+# cmap => colormap => gives different shades of the color
+# The available colormaps can be seen using plt.colormaps()
+
+ax.scatter(np.sin(x),np.cos(x),x,c=x,cmap='Blues')
+plt.show()
+```
+
+#### Output
+![3D Scatter Graph](./Scatter_Graph/3D%20plot%20Scatter%20Graph.png)
