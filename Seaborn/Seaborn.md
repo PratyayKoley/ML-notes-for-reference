@@ -15,7 +15,9 @@ import seaborn as sns
 # Different plots available in seaborn
 
 ## 1. Relational Data
+
 **Scatter plots and line plots for relationships between two variables:**
+
 - **`scatterplot()`**: Use for visualizing the relationship between two numeric variables.
   - Example: Exploring the relationship between height and weight.
 - **`lineplot()`**: Use for trends over time or ordered data.
@@ -24,7 +26,9 @@ import seaborn as sns
   - Example: Visualizing relationships across multiple subgroups.
 
 ## 2. Categorical Data
+
 **Visualizing categorical variables:**
+
 - **`stripplot()`**: Use for plotting a categorical scatter plot.
   - Example: Distribution of a numeric value across different categories.
 - **`swarmplot()`**: Similar to `stripplot`, but points are adjusted to avoid overlap.
@@ -43,7 +47,9 @@ import seaborn as sns
   - Example: Count of different car models.
 
 ## 3. Distribution Data
+
 **Visualizing the distribution of a single variable:**
+
 - **`displot()`**: General-purpose distribution plot, can create histograms, KDE plots, and ECDF plots.
   - Example: Distribution of ages in a population.
 - **`histplot()`**: Use for creating histograms.
@@ -56,14 +62,18 @@ import seaborn as sns
   - Example: Adding rug ticks to a scatter plot for better data distribution understanding.
 
 ## 4. Matrix Plots
+
 **Visualizing data matrices:**
+
 - **`heatmap()`**: Use for displaying matrix-like data where values are represented with color.
   - Example: Correlation matrix of features in a dataset.
 - **`clustermap()`**: Use for hierarchical clustering of rows and columns of a matrix.
   - Example: Clustering gene expression data.
 
 ## 5. Regression Data
+
 **Visualizing regression models:**
+
 - **`lmplot()`**: Use for plotting linear models with faceting options.
   - Example: Relationship between advertising spend and sales, separated by region.
 - **`regplot()`**: Use for plotting a simple linear regression model.
@@ -72,7 +82,9 @@ import seaborn as sns
   - Example: Residual plot to diagnose a linear regression model.
 
 ## 6. Multi-Plot Grids
+
 **Creating grids of plots:**
+
 - **`FacetGrid`**: Use for plotting multiple subsets of data.
   - Example: Visualizing the relationship between variables across different subsets (like species in the Iris dataset).
 - **`PairGrid`**: Use for plotting pairwise relationships in a dataset.
@@ -83,17 +95,20 @@ import seaborn as sns
   - Example: Scatter plot of weight vs. height with histograms on the margins.
 
 ## 7. Timeseries Data
+
 **Visualizing data over time:**
+
 - **`lineplot()`**: Use for plotting time series data.
   - Example: Daily temperature changes over a month.
 
 ## 8. Error Bars
+
 **Adding error bars to plots:**
+
 - **`errorbar()`**: Use for adding error bars to various plots.
   - Example: Mean test scores with error bars showing standard deviation.
 
 Seaborn also includes tools for customizing plots, such as color palettes (`color_palette()`), themes (`set_style()`, `set_context()`, `set_palette()`), and more.
-
 
 ## Loading the dataset 'tips' from seaborn (RELPLOT)
 
@@ -426,7 +441,7 @@ print(california_correlate)
 
 2.  Plotting this correlation
 
-```python 
+```python
 from sklearn.datasets import fetch_california_housing
 import pandas as pd
 import seaborn as sns
@@ -448,7 +463,9 @@ plt.show()
 ```
 
 #### Output
+
 ![Heatmap without params](./Seaborn/Heatmap%20without%20any%20params.png)
+
 ### This is the heatmap which does not include any parameters just the data to make it more eye appealing seaborn provides some parameters which makes it better than the above plot
 
 ```python
@@ -471,7 +488,7 @@ print(california_correlate)
 
 # Heatmap using params provided by seaborn
 
-# Adjusting the figure size to fit 
+# Adjusting the figure size to fit
 fig,ax = plt.subplots(figsize=(9,8))
 
 # cbar makes the bar show with different colors, square makes the size of the cells as square, annot makes the annotations inside the cells true, annot_kws helps to style the annotation keywords (color,size,etc.), cmap is used for colormappping of the cells and fmt is used for formatting the annot keywords .3f means till 3 decimal places.
@@ -481,4 +498,50 @@ plt.show()
 ```
 
 #### Output
+
 ![Heatmap with params](./Seaborn/Heatmap%20with%20params.png)
+
+## Loading the csv file for 'tesla stock price' and using seaborn for plotting it (LINEPLOT)
+
+```python
+import seaborn as sns
+import pandas as pd
+import matplotlib.pyplot as plt
+
+tesla_df = pd.read_csv("C:\Machine Learning\DataSets\Tasla_Stock_Updated_V2.csv")
+
+print(tesla_df.head())
+```
+
+#### Output
+
+| Unnamed: 0 | Date       | Open      | High      | Low       | Close     | Volume   |
+| ---------- | ---------- | --------- | --------- | --------- | --------- | -------- |
+| 0          | 2015-01-02 | 14.858000 | 14.883333 | 14.217333 | 14.620667 | 71466000 |
+| 1          | 2015-01-05 | 14.303333 | 14.433333 | 13.810667 | 14.006000 | 80527500 |
+| 2          | 2015-01-06 | 14.004000 | 14.280000 | 13.614000 | 14.085333 | 93928500 |
+| 3          | 2015-01-07 | 14.223333 | 14.318667 | 13.985333 | 14.063333 | 44526000 |
+| 4          | 2015-01-08 | 14.187333 | 14.253333 | 14.000667 | 14.041333 | 51637500 |
+
+### Plotting the above data using LINEPLOT
+
+```python
+import seaborn as sns
+import pandas as pd
+import matplotlib.pyplot as plt
+
+tesla_df = pd.read_csv("C:\Machine Learning\DataSets\Tasla_Stock_Updated_V2.csv")
+
+print(tesla_df.head())
+
+sns.lineplot(data=tesla_df, x='Date', y='Close')
+plt.xticks(fontsize=6)
+# sets the fontsize of x labels as 6
+plt.gca().xaxis.set_major_locator(plt.MaxNLocator(10))
+# gca => get current axes, then select xaxis, MaxNLocator => maximum labels to be shown
+plt.show()
+```
+
+#### Output
+
+![Stock Price](./Seaborn/Stock_Price_Dataset.png)

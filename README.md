@@ -1,6 +1,6 @@
 # Machine Learning Notes
 
-Welcome to my Machine Learning notes repository. These notes are written in Markdown (.md) format for better presentation and ease of reference. This repository is intended to serve as a comprehensive guide and reference for various topics in Machine Learning.
+Welcome to my Machine Learning notes repository. These notes are written in Markdown (.md) format for better presentation and ease of reference. IDE used is VS Code. This repository is intended to serve as a comprehensive guide and reference for various topics in Machine Learning.
 
 ## Repository Structure
 
@@ -12,6 +12,7 @@ The repository is organized into the following sections:
 - **Numpy**: Notes on using Numpy for numerical computations.
 - **Pandas**: Notes on using Pandas for data manipulation and analysis.
 - **Python Basics**: Covers basic Python programming concepts.
+- **Seaborn**: Notes and examples on using Seaborn for statistical data visualization.
 
 ## Getting Started
 
@@ -22,3 +23,4 @@ To view the notes, simply navigate to the relevant directory and open the `.md` 
 ```bash
 git clone https://github.com/PratyayKoley/ML-notes-for-reference.git
 cd ML-notes-for-reference
+```
