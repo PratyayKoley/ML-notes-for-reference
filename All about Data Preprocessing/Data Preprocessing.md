@@ -341,6 +341,8 @@ By standardizing your data, you improve the performance of many machine learning
   X_test_standardized = scaler.transform(X_test)
   ```
 
+  <hr>
+
 #### Overall Output for Standardization
 
 ```python
@@ -348,4 +350,241 @@ Standard deviation of X_train_standardized: 1.0     # Changed from 228 to 1
 Standard deviation of X_test_standardized: 0.8654541077212674     # Close to 1
 ```
 
-Generally it is not needed to train the Y data as it is the prediction. Scaling Y would change the interpretation of your predictions. 
+Generally it is not needed to train the Y data as it is the prediction. Scaling Y would change the interpretation of your predictions.
+
+## Label Encoding
+
+It converts the labelled data (written text) into numerical form.
+
+Loading the datasets and finding the count of the values
+
+```python
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+
+# Loads the data
+breast_cancer = pd.read_csv('./DataSets/breast_cancer.csv')
+iris = pd.read_csv('./DataSets/iris_data.csv')
+
+# Displays the five rows of data
+print(breast_cancer.head())
+print(iris.head())
+
+# Counting the number of values for the labelled rows in both dataset
+print(breast_cancer['diagnosis'].value_counts())
+print(iris['Species'].value_counts())
+```
+
+#### Output
+
+| id       | diagnosis | radius_mean | texture_mean | perimeter_mean | area_mean | ... | compactness_worst | concavity_worst | concave points_worst | symmetry_worst | fractal_dimension_worst | Unnamed: 32 |
+| -------- | --------- | ----------- | ------------ | -------------- | --------- | --- | ----------------- | --------------- | -------------------- | -------------- | ----------------------- | ----------- |
+| 842302   | M         | 17.99       | 10.38        | 122.80         | 1001.0    | ... | 0.6656            | 0.7119          | 0.2654               | 0.4601         | 0.11890                 | NaN         |
+| 842517   | M         | 20.57       | 17.77        | 132.90         | 1326.0    | ... | 0.1866            | 0.2416          | 0.1860               | 0.2750         | 0.08902                 | NaN         |
+| 84300903 | M         | 19.69       | 21.25        | 130.00         | 1203.0    | ... | 0.4245            | 0.4504          | 0.2430               | 0.3613         | 0.08758                 | NaN         |
+| 84348301 | M         | 11.42       | 20.38        | 77.58          | 386.1     | ... | 0.8663            | 0.6869          | 0.2575               | 0.6638         | 0.17300                 | NaN         |
+| 84358402 | M         | 20.29       | 14.34        | 135.10         | 1297.0    | ... | 0.2050            | 0.4000          | 0.1625               | 0.2364         | 0.07678                 | NaN         |
+
+| Id  | SepalLengthCm | SepalWidthCm | PetalLengthCm | PetalWidthCm | Species     |
+| --- | ------------- | ------------ | ------------- | ------------ | ----------- |
+| 1   | 5.1           | 3.5          | 1.4           | 0.2          | Iris-setosa |
+| 2   | 4.9           | 3.0          | 1.4           | 0.2          | Iris-setosa |
+| 3   | 4.7           | 3.2          | 1.3           | 0.2          | Iris-setosa |
+| 4   | 4.6           | 3.1          | 1.5           | 0.2          | Iris-setosa |
+| 5   | 5.0           | 3.6          | 1.4           | 0.2          | Iris-setosa |
+
+    diagnosis
+    B    357
+    M    212
+    Name: count, dtype: int64
+
+    Species
+    Iris-setosa        50
+    Iris-versicolor    50
+    Iris-virginica     50
+    Name: count, dtype: int64
+
+As we can see that there are 357 cases of benign (B) breast cancer and 212 cases of malignant(M) breast cancer.  
+Also for iris dataset there are 50 cases of setosa, 50 of versicolor and 50 of virginica.  
+These columns are the target values in the dataset, so instead of reading the labels we convert this to numerical form. That is called **Label Encoding**.
+
+  <hr />
+
+```python
+# Breast Cancer Dataset
+
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+
+# Loads the data
+breast_cancer = pd.read_csv('./DataSets/breast_cancer.csv')
+iris = pd.read_csv('./DataSets/iris_data.csv')
+
+# Importing the label encoder
+label_encoder = LabelEncoder()
+
+# Tranforming the labels of diagnosis column
+labels = label_encoder.fit_transform(breast_cancer['diagnosis'])
+
+# Putting these tranform values to the table in a new column target
+breast_cancer['target'] = labels
+
+print(breast_cancer['target'].value_counts())
+```
+
+#### Output
+
+    diagnosis
+    0    357
+    1    212
+    Name: count, dtype: int64
+
+As we can see that the Beningn(B) is changed to 0 and the Malignant(M) is changed to 1.
+
+```python
+# Iris Dataset
+
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+
+# Loads the data
+breast_cancer = pd.read_csv('./DataSets/breast_cancer.csv')
+iris = pd.read_csv('./DataSets/iris_data.csv')
+
+# Importing the label encoder
+label_encoder = LabelEncoder()
+
+# Tranforming the labels of Species column of iris
+labels = label_encoder.fit_transform(iris['Species'])
+
+# Putting these tranform values to the table in a new column class
+iris['class'] = labels
+
+print(iris['class'].value_counts())
+```
+
+#### Output
+
+    class
+    0    50
+    1    50
+    2    50
+    Name: count, dtype: int64
+
+Here the Species Iris-setosa, Iris-versicolor and Iris-virginica are changed to their numerical form.  
+These numbers are assigned by the alphabetical orders.  
+`Iris-setosa => 0`  
+`Iris-virginica => 1`  
+`Iris-versicolor => 2`
+
+## Handling the Imbalanced Dataset
+
+An **imbalanced dataset** is a dataset with an unequal class distribution.  
+For example, in this dataset we have credit card transactions with a column of class containing the values 0 and 1.  
+`0 => Legit Transactions`  
+`1 => Fradulent Transactions`  
+But in this dataset the number of Legit Transactions is much much more higher than the number of Fradulent Transactions.
+
+### Loading the Dataset and counting the values of 0 and 1
+
+```python
+import numpy as np
+import pandas as pd
+
+# Loading the dataset
+credit_card_data = pd.read_csv('DataSets/credit_data.csv')
+
+# Printing the first five rows
+print(credit_card_data.head())
+
+# Counting the number of values of the column 'Class'
+print(credit_card_data['Class'].value_counts())
+```
+
+#### Output
+
+| Time | V1        | V2        | V3       | V4        | V5        | V6        | V7        | V8        | ... | V22       | V23       | V24       | V25       | V26       | V27       | V28       | Amount | Class |
+| ---- | --------- | --------- | -------- | --------- | --------- | --------- | --------- | --------- | --- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | ------ | ----- |
+| 0.0  | -1.359807 | -0.072781 | 2.536347 | 1.378155  | -0.338321 | 0.462388  | 0.239599  | 0.098698  | ... | 0.277838  | -0.110474 | 0.066928  | 0.128539  | -0.189115 | 0.133558  | -0.021053 | 149.62 | 0     |
+| 0.0  | 1.191857  | 0.266151  | 0.166480 | 0.448154  | 0.060018  | -0.082361 | -0.078803 | 0.085102  | ... | -0.638672 | 0.101288  | -0.339846 | 0.167170  | 0.125895  | -0.008983 | 0.014724  | 2.69   | 0     |
+| 1.0  | -1.358354 | -1.340163 | 1.773209 | 0.379780  | -0.503198 | 1.800499  | 0.791461  | 0.247676  | ... | 0.771679  | 0.909412  | -0.689281 | -0.327642 | -0.139097 | -0.055353 | -0.059752 | 378.66 | 0     |
+| 1.0  | -0.966272 | -0.185226 | 1.792993 | -0.863291 | -0.010309 | 1.247203  | 0.237609  | 0.377436  | ... | 0.005274  | -0.190321 | -1.175575 | 0.647376  | -0.221929 | 0.062723  | 0.061458  | 123.50 | 0     |
+| 2.0  | -1.158233 | 0.877737  | 1.548718 | 0.403034  | -0.407193 | 0.095921  | 0.592941  | -0.270533 | ... | 0.798278  | -0.137458 | 0.141267  | -0.206010 | 0.502292  | 0.219422  | 0.215153  | 69.99  | 0     |
+
+[5 rows x 31 columns]
+
+    Class
+    0    284315
+    1       492
+    Name: count, dtype: int64
+
+It can be clearly seen that the number of legit transactions is 2,84,315 and that of fradulent transactions is 492. Here what we do is we take a limited number of datapoints from the legit transactions to match the number of datapoints from the fradulent transactions. 
+**This approach is known as Undersampling.** This makes a new dataset which will be balanced.
+
+#### Advantages : This method helps prevent the model from being biased towards the majority class.
+
+- Seperating the legit and fraud transactions 
+  ```python
+  # Seperating the Legit and Fraudulent Transactions
+  legit_transac = credit_card_data[credit_card_data['Class'] == 0]
+  fraud_transac = credit_card_data[credit_card_data['Class'] == 1]
+
+  # legit_transac contains 2,84,315 datapoints and fraud_transac contains 492 datapoints
+  ```
+
+- Creating a new legit_tranac with 492 datapoints
+  ```python
+  # Creating a new dataset of legit_transac with random 492 points out of the old dataset of legit_transac
+  new_legit_transac = legit_transac.sample(n=492)     
+
+  # Printing the shape of the new dataset of legit_transac
+  print(new_legit_transac.shape)
+  ```
+
+  #### Output
+      (492, 31)
+
+- Combining the new_legit and old_fraud to make a new balanced dataset
+  ```python
+  # Creating the new credit_card dataset with mixed datapoints of 492 new_legit and 492 old_fraud transactions
+  # axis = 0 means combine in terms of rows not in columns
+  new_credit_card_data = pd.concat([new_legit_transac,fraud_transac],axis=0)
+
+  # Printing the first five rows of data
+  print(new_credit_card_data.head()) 
+
+  # Printing the last five rows of data
+  print(new_credit_card_data.tail())
+
+  # Counting the number of values of the column 'Class' in new dataset
+  print(new_credit_card_data['Class'].value_counts())
+  ```
+
+  #### Output
+  head()
+
+  | Index  | Time    | V1       | V2       | V3       | V4       | V5       | V6       | V7       | V8       | ... | V22      | V23      | V24      | V25      | V26      | V27      | V28      | Amount | Class |
+  |--------|---------|----------|----------|----------|----------|----------|----------|----------|----------|-----|----------|----------|----------|----------|----------|----------|----------|--------|-------|
+  | 80907  | 58710.0 | -1.050926| 0.815976 | -0.306074| -0.131973| -1.560249| 0.738732 | 2.257305 | -0.177135| ... | 0.103563 | -0.212282| -0.422392| -0.022029| 1.163511 | -0.089614| -0.090484| 419.96 | 0     |
+  | 61060  | 49638.0 | -0.768831| 0.721597 | 2.077620 | 1.386042 | -0.953130| 0.210961 | -0.572920| 0.786263 | ... | 0.441626 | 0.050288 | 0.383550 | -0.586890| -0.331563| 0.111361 | 0.087345 | 10.00  | 0     |
+  | 270086 | 163914.0| -0.335261| -0.154156| -0.421476| -0.008303| -1.166101| 2.387925 | -1.053310| -3.551293| ... | 1.431594 | -1.357234| 0.018353 | 1.824909 | 0.953848 | 0.288240 | 0.099910 | 378.00 | 0     |
+  | 71138  | 54175.0 | 0.817135 | -2.201222| 0.779840 | -1.123952| -2.374996| -0.405841| -1.101712| -0.003851| ... | -0.122978| -0.164727| 0.508008 | -0.023591| -0.297312| -0.003803| 0.079369 | 327.60 | 0     |
+  | 88073  | 61972.0 | 1.011703 | -0.309617| 0.853154 | 1.676177 | -0.902768| -0.183472| -0.273783| 0.073116 | ... | -0.111641| -0.155781| 0.396962 | 0.623388 | -0.292656| 0.035216 | 0.037332 | 85.60  | 0     |
+
+  [5 rows x 31 columns]
+
+  tail()
+  | Index  | Time    | V1       | V2       | V3       | V4       | V5       | V6       | V7       | V8       | ... | V22      | V23      | V24      | V25      | V26      | V27      | V28      | Amount | Class |
+  |--------|---------|----------|----------|----------|----------|----------|----------|----------|----------|-----|----------|----------|----------|----------|----------|----------|----------|--------|-------|
+  | 279863 | 169142.0| -1.927883| 1.125653 | -4.518331| 1.749293 | -1.566487| -2.010494| -0.882850| 0.697211 | ... | -0.319189| 0.639419 | -0.294885| 0.537503 | 0.788395 | 0.292680 | 0.147968 | 390.00 | 1     |
+  | 280143 | 169347.0| 1.378559 | 1.289381 | -5.004247| 1.411850 | 0.442581 | -1.326536| -1.413170| 0.248525 | ... | 0.028234 | -0.145640| -0.081049| 0.521875 | 0.739467 | 0.389152 | 0.186637 | 0.76   | 1     |
+  | 280149 | 169351.0| -0.676143| 1.126366 | -2.213700| 0.468308 | -1.120541| -0.003346| -2.234739| 1.210158 | ... | 0.834108 | 0.190944 | 0.032070 | -0.739695| 0.471111 | 0.385107 | 0.194361 | 77.89  | 1     |
+  | 281144 | 169966.0| -3.113832| 0.585864 | -5.399730| 1.817092 | -0.840618| -2.943548| -2.208002| 1.058733 | ... | -0.269209| -0.456108| -0.183659| -0.328168| 0.606116 | 0.884876 | -0.253700| 245.00 | 1     |
+  | 281674 | 170348.0| 1.991976 | 0.158476 | -2.583441| 0.408670 | 1.151147 | -0.096695| 0.223050 | -0.068384| ... | -0.295135| -0.072173| -0.450261| 0.313267 | -0.289617| 0.002988 | -0.015309| 42.53  | 1     |
+
+  [5 rows x 31 columns]
+
+      Class
+      0    492
+      1    492
+      Name: count, dtype: int64
